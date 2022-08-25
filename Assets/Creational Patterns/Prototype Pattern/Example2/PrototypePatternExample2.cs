@@ -8,64 +8,66 @@ using System;
 
 namespace PrototypePatternExample2
 {
-    public class PrototypePatternExample2 : MonoBehaviour
-    {
-        void Start()
-        {
-            CloneFactory factory = new CloneFactory();
-            
-            Sheep sally = new Sheep();
+	/// <summary>
+	/// 1
+	/// </summary>
+	public interface IAnimal : ICloneable
+	{
+		object Clone();
+	}
 
-            Sheep clonedSheep = (Sheep)factory.GetClone(sally);
+	/// <summary>
+	/// 2
+	/// </summary>
+	public class Sheep : IAnimal
+	{
+		public Sheep()
+		{
+			Debug.Log("Made Sheep");
+		}
 
-            Debug.Log("Sally: " + sally.ToStringEX());
-            Debug.Log("Clone of Sally: " + clonedSheep.ToStringEX());
-            Debug.Log("Sally Hash: " + sally.GetHashCode() + " - Cloned Sheep Hash: " + clonedSheep.GetHashCode());
-        }
+		public object Clone()
+		{
+			Sheep sheep = null;
 
-    }
+			sheep = (Sheep)base.MemberwiseClone();
 
-    public class CloneFactory
-    {
-        public IAnimal GetClone(IAnimal animalSample)
-        {
-            return (IAnimal)animalSample.Clone();
-        }
-    }
+			return sheep;
+		}
 
-    public interface IAnimal : ICloneable
-    {
-        object Clone();
-    }
+		public string ToStringEX()
+		{
+			return "Hello I'm a Sheep";
+		}
+	}
 
-    public class Sheep : IAnimal
-    {
-        public Sheep()
-        {
-            Debug.Log("Made Sheep");
-        }
+	/// <summary>
+	/// 3
+	/// </summary>
+	public class CloneFactory
+	{
+		public IAnimal GetClone(IAnimal animalSample)
+		{
+			return (IAnimal)animalSample.Clone();
+		}
+	}
 
-        public object Clone()
-        {
-            Sheep sheep = null;
+	/// <summary>
+	/// 4
+	/// </summary>
+	public class PrototypePatternExample2 : MonoBehaviour
+	{
+		void Start()
+		{
+			CloneFactory factory = new CloneFactory();
 
-            try
-            {
-                sheep = (Sheep)base.MemberwiseClone();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Error cloning Sheep");
-            }
+			Sheep sally = new Sheep();
 
-            return sheep;
-        }
+			Sheep clonedSheep = (Sheep)factory.GetClone(sally);
 
-        public string ToStringEX()
-        {
-            return "Hello I'm a Sheep";
-        }
-    }
-
+			Debug.Log("Sally: " + sally.ToStringEX());
+			Debug.Log("Clone of Sally: " + clonedSheep.ToStringEX());
+			Debug.Log("Sally Hash: " + sally.GetHashCode() + " - Cloned Sheep Hash: " + clonedSheep.GetHashCode());
+		}
+	}
 }
-
